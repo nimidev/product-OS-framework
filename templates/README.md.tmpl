@@ -16,19 +16,25 @@ When creating a new story, use the next available ID. The `/create` command in C
 
 ## Quick Start
 
-### For Product Managers
+### Phase 1 – Create & Verify (PRD)
 
 1. Open the workspace file in Cursor (`.code-workspace`)
 2. Create a story: `/create "feature description" @{{projectName}}/backlog.md`
 3. Refine requirements through conversation with the AI agent
-4. Approve the PRD when ready
+4. Let the agent verify the PRD and address any gaps
+5. Approve the PRD when it is clear and ready for development
 
-### For Developers
+### Phase 2 – Dev (Implementation)
 
-1. Open the workspace file in Cursor (`.code-workspace`)
-2. Start development: `/dev US-{ID}`
-3. The agent reads RULES.md and follows project standards
-4. Ship it: `/release US-{ID}`
+1. With the same workspace open, start development: `/dev US-{ID}`
+2. The agent reads the PRD and `RULES.md`, proposes a plan, and implements tasks iteratively
+3. Continue until all tasks are complete, tests pass, and ACs are covered
+
+### Phase 3 – Release (Ship & Document)
+
+1. When development is complete, run: `/release US-{ID}`
+2. The agent helps review, merge, deploy, and update documentation
+3. The story is marked as **done** in both product docs and code
 
 ### Dashboard
 

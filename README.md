@@ -19,6 +19,9 @@ PM creates & verifies PRD → Dev builds & tests → Team releases & documents
 | `/dev` | Developer | Kickoff → Code → Test → PR ready |
 | `/release` | Team | Review → Merge → Deploy → Document |
 
+> Note: In some workspaces these may be named with a `story-` prefix (for example, `/story-create`, `/story-dev`, `/story-release`).  
+> The rest of this README uses the shorter names (`/create`, `/dev`, `/release`) for clarity—map them to whatever command names you configure in Cursor.
+
 **Plus a CLI dashboard:**
 
 ```
@@ -46,6 +49,9 @@ delivery-api (4 stories)
 ## Quick Start
 
 ### 1. Install
+
+If you are non-technical: the command below is run in your **Terminal** app (macOS: search for "Terminal" in Spotlight).  
+`npm` is a standard tool that comes with [Node.js](https://nodejs.org/). If `npm` is not recognized, install Node.js first or ask a developer to help with this one-time setup.
 
 ```bash
 npm install -g prd-cli
@@ -89,16 +95,36 @@ prd
 
 ## How It Works
 
-### For Product Managers
+### Phase 1 – Create & Verify (PRD)
 
-1. **`/create`** - Interactive PRD creation with AI-powered refinement
-2. **`/verify`** - Automated quality checks for your PRD
-3. **`prd dashboard`** - See all stories across all projects
+Goal: go from idea to a clear, verified PRD with extracted features and tasks.
 
-### For Developers
+- Start in Cursor with: `/create "feature description" @project/backlog.md`
+- Refine the requirements through a conversation with the agent.
+- Run verification to find gaps and either auto-apply or manually fix suggestions.
+- Exit when the PRD is approved and the story is tracked in `backlog.md`.
 
-1. **`/dev US-001`** - AI reads the PRD + RULES.md, generates tasks, builds iteratively
-2. **`/release US-001`** - Merge, deploy, document
+### Phase 2 – Dev (Implementation)
+
+Goal: implement the story according to the PRD and RULES, with tests and a ready PR.
+
+- Start or resume with: `/dev US-{ID}`
+- The agent:
+  - Loads the PRD, backlog entry, and `RULES.md`
+  - Proposes a plan and tasks
+  - Iterates through: code → tests → AC verification
+- Exit when all tasks are done, tests pass, ACs are covered, and a PR is ready.
+
+### Phase 3 – Release (Ship & Document)
+
+Goal: review, merge, deploy, and update documentation so the story is fully shipped.
+
+- Start with: `/release US-{ID}`
+- The agent:
+  - Reviews AC checklist, tests, and PR status
+  - Helps you merge and deploy via your existing pipeline
+  - Updates `CHANGELOG`, PRD status, and backlog
+- Exit when the story is live in production and marked **done** in docs and code.
 
 ### Workspace Structure
 
