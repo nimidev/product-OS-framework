@@ -1,0 +1,41 @@
+{
+  "name": "prd-cli",
+  "version": "1.0.0",
+  "description": "Product OS Framework - AI-native product development lifecycle for Cursor",
+  "main": "lib/parser.js",
+  "bin": {
+    "prd": "./bin/prd.js"
+  },
+  "scripts": {
+    "test": "node test/run.js",
+    "link": "npm link",
+    "unlink": "npm unlink"
+  },
+  "keywords": [
+    "product-management",
+    "prd",
+    "cursor",
+    "ai-native",
+    "developer-tools",
+    "product-development",
+    "agile",
+    "cli"
+  ],
+  "author": "Nimrod Margalit",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nimidev/product-OS-framework.git"
+  },
+  "homepage": "https://github.com/nimidev/product-OS-framework#readme",
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "dependencies": {
+    "chalk": "^4.1.2",
+    "cli-table3": "^0.6.3",
+    "commander": "^12.0.0",
+    "gray-matter": "^4.0.3",
+    "inquirer": "^8.2.6"
+  }
+}

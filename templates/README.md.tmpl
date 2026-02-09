@@ -1,0 +1,76 @@
+# {{workspaceName}}
+
+Product documentation workspace powered by [Product OS Framework](https://github.com/nimidev/product-OS-framework).
+
+## Projects
+
+| Project | Description |
+|---------|-------------|
+| [{{projectName}}](./{{projectName}}/) | {{projectDescription}} |
+
+## Story ID Registry
+
+**Next Available ID: {{nextId}}**
+
+When creating a new story, use the next available ID. The `/create` command in Cursor handles this automatically.
+
+## Quick Start
+
+### For Product Managers
+
+1. Open the workspace file in Cursor (`.code-workspace`)
+2. Create a story: `/create "feature description" @{{projectName}}/backlog.md`
+3. Refine requirements through conversation with the AI agent
+4. Approve the PRD when ready
+
+### For Developers
+
+1. Open the workspace file in Cursor (`.code-workspace`)
+2. Start development: `/dev US-{ID}`
+3. The agent reads RULES.md and follows project standards
+4. Ship it: `/release US-{ID}`
+
+### Dashboard
+
+View all stories from any terminal:
+
+```bash
+prd              # Full dashboard
+prd list         # Compact view
+prd stats        # Quick numbers
+```
+
+## Process
+
+See [PROCESS.md](./PROCESS.md) for the complete product development workflow.
+
+## Story File Format
+
+Stories use YAML frontmatter for metadata:
+
+```yaml
+---
+id: US-001
+project: {{projectName}}
+status: create
+phase: planning
+progress: 0
+priority: P1
+---
+
+# Story Title
+
+## Goal
+What problem does this solve?
+
+## Acceptance Criteria
+1. ...
+```
+
+## Adding a New Project
+
+```bash
+prd add-project
+```
+
+This creates the project folder, backlog, RULES.md, and updates the workspace.
