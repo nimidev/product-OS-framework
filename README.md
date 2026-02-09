@@ -19,8 +19,8 @@ PM creates & verifies PRD → Dev builds & tests → Team releases & documents
 | `/dev` | Developer | Kickoff → Code → Test → PR ready |
 | `/release` | Team | Review → Merge → Deploy → Document |
 
-> Note: In some workspaces these may be named with a `story-` prefix (for example, `/story-create`, `/story-dev`, `/story-release`).  
-> The rest of this README uses the shorter names (`/create`, `/dev`, `/release`) for clarity—map them to whatever command names you configure in Cursor.
+> Note: Throughout this README we assume the command names `/create`, `/verify`, `/dev`, and `/release`.  
+> You can choose different names when you configure them as Cursor slash commands—see `CURSOR_SLASH_COMMANDS.md` for details.
 
 **Plus a CLI dashboard:**
 
@@ -64,9 +64,9 @@ prd init
 ```
 
 Answer the prompts:
-- Workspace name (e.g., `product-docs`)
-- First project name (e.g., `my-app`)
-- Path to dev repo (optional)
+- **Workspace name** – the folder that will hold **all** your product docs (for all projects), e.g. `product-docs`
+- **First project name** – a single product or codebase inside that workspace, e.g. `my-app`
+- **Path to dev repo (optional)** – where the code for that first project lives, so Cursor can open docs + code together
 
 This creates your product docs folder, templates, and a `.code-workspace` file.
 
@@ -78,7 +78,20 @@ cursor your-workspace.code-workspace
 
 Both your product docs and dev repo are connected automatically.
 
-### 4. Create Your First Story
+### 4. Configure Cursor Slash Commands
+
+Before creating your first story, set up the slash commands in Cursor that trigger each phase (for example `/create`, `/verify`, `/dev`, `/release`).
+
+Product OS assumes you will trigger each phase from a dedicated slash command in Cursor. These commands are **not** created automatically by `prd-cli` — you define them once in Cursor using the prompts in:
+
+- [`CURSOR_SLASH_COMMANDS.md`](./CURSOR_SLASH_COMMANDS.md)
+
+After you add them, the slash commands and this framework work together:
+
+- The **slash commands** drive the conversational workflow in Cursor.
+- The **CLI** (`prd`) gives you a dashboard and stats across all stories.
+
+### 5. Create Your First Story
 
 In Cursor chat:
 ```
@@ -87,7 +100,7 @@ In Cursor chat:
 
 The AI agent walks you through defining requirements, verifying quality, and extracting features.
 
-### 5. View Dashboard
+### 6. View Dashboard
 
 ```bash
 prd
@@ -99,7 +112,7 @@ prd
 
 Goal: go from idea to a clear, verified PRD with extracted features and tasks.
 
-- Start in Cursor with: `/create "feature description" @project/backlog.md`
+- Start in Cursor with: `/create "feature description" @my-app/backlog.md` (always tag the **backlog file of the specific project** you want to create the story in)
 - Refine the requirements through a conversation with the agent.
 - Run verification to find gaps and either auto-apply or manually fix suggestions.
 - Exit when the PRD is approved and the story is tracked in `backlog.md`.
