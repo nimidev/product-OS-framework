@@ -41,11 +41,12 @@ All commands assume:
 **Recommended command name:** `/create`  
 **Alternative names:** `/story-create`, `/prd-create`  
 **Typical usage:**  
-`/create "Add email notifications" @project/backlog.md`
+`/create "Add email notifications" @project/backlog.md`  
+`/create from #123 @project/backlog.md` — create a story from GitHub Issue #123 (use the Issue’s title and body as the PRD foundation and set `source_issue` in the story).
 
 ### Description (for Cursor UI)
 
-> Create and refine a new story (US-XXX) from a short description, update backlog, and verify the PRD using PROCESS.md.
+> Create and refine a new story (US-XXX) from a short description or from a GitHub Issue, update backlog, and verify the PRD using PROCESS.md.
 
 ### Prompt (system prompt to paste into Cursor)
 
@@ -58,21 +59,25 @@ Goal:
 
 Instructions:
 1. Read PROCESS.md and focus on the Phase 1 (/create) section.
-2. Read product-docs/README.md to understand the workspace and how global story IDs work.
-3. Read the referenced backlog file (e.g. {project}/backlog.md) to understand existing stories.
-4. Determine the next available global ID (US-XXX) using README.md and/or backlog.md.
-5. Create or update the story file {project}/US-XXX.md using the required YAML frontmatter and sections from PROCESS.md.
-6. Drive an iterative conversation with the user to refine:
+2. If the user’s message includes an Issue reference (e.g. “from #123”, “from issue #123”, “based on #123”):
+   - Treat that GitHub Issue as the primary input. Read the Issue’s title and body (e.g. from the repo’s Issues, or from context the user provides).
+   - Use the Issue content to prefill the PRD: map “Problem Statement” and “Expected Behavior” (or similar) from the Issue into the story’s Goal, Problem Statement, and Acceptance Criteria. If the user did not paste the Issue body, ask them to paste it or confirm you have the right Issue.
+   - In the story file’s YAML frontmatter, set source_issue: "#123" (or the actual issue number) so the story is traceable to the Issue.
+3. Read product-docs/README.md to understand the workspace and how global story IDs work.
+4. Read the referenced backlog file (e.g. {project}/backlog.md) to understand existing stories.
+5. Determine the next available global ID (US-XXX) using README.md and/or backlog.md.
+6. Create or update the story file {project}/US-XXX.md using the required YAML frontmatter and sections from PROCESS.md (prefilled from the Issue when applicable).
+7. Drive an iterative conversation with the user to refine:
    - Problem statement, users, and goals
    - Scope, behavior, and non-goals
    - Acceptance criteria (AC), edge cases, non-functional requirements (NFRs)
-7. Run a PRD verification pass as described in PROCESS.md:
+8. Run a PRD verification pass as described in PROCESS.md:
    - Identify gaps
    - Propose concrete fixes
    - Apply or leave for manual edits, based on user choice
-8. Extract features and dev tasks if the process calls for it.
-9. Update {project}/backlog.md and any "next ID" registry so the story is tracked.
-10. When the PRD is ready, summarize:
+9. Extract features and dev tasks if the process calls for it.
+10. Update {project}/backlog.md and any "next ID" registry so the story is tracked.
+11. When the PRD is ready, summarize:
     - Story ID and title
     - Key AC and NFRs
     - Features and dev tasks
@@ -82,6 +87,7 @@ Always:
 - Keep edits within the product-docs repo.
 - Use specific, testable acceptance criteria.
 - Ask for clarification instead of inventing product decisions.
+- When the story was created from an Issue (source_issue set), remind the user to update the GitHub Issue: remove label "triage" and add label "story-created" so the issue lifecycle stays in sync (see PROCESS.md Triage Workflow).
 ```
 
 ---
@@ -167,7 +173,7 @@ Instructions:
 6. When the story is implemented:
    - Summarize changes
    - Make sure tests are passing
-   - Prepare a PR title and body
+   - Prepare a PR title and body. If the story has source_issue in its frontmatter, the PR description must include "Fixes #<issue_id>" or "Closes #<issue_id>" so the GitHub Issue is linked and auto-closed when the PR is merged (see PROCESS.md Triage Workflow).
    - Remind the user to push and open/refresh the PR
 
 Always:
@@ -206,6 +212,7 @@ Instructions:
 3. Drive a pre-release review:
    - Check that all ACs are addressed
    - Confirm tests are passing
+   - If the story has source_issue, confirm the PR description includes "Fixes #<issue_id>" or "Closes #<issue_id>" so the Issue will be closed when the PR is merged (see PROCESS.md Triage Workflow). If missing, ask the user to add it before merging.
    - Identify open risks or TODOs
 4. Help the user:
    - Approve and merge the PR (you can suggest exact CLI commands if they use git/gh)

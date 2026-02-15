@@ -66,17 +66,21 @@ program
   .action((options) => {
     const chalk = require('chalk');
     const { scanAllStories, getStats } = require('../lib/parser');
+    const { getTriageIssueCount } = require('../lib/github');
 
     const docsPath = resolveDocsPath(options.path);
     try {
       const data = scanAllStories(docsPath);
       const stats = getStats(data.stories);
+      const triageCount = getTriageIssueCount(process.cwd());
 
       console.log('\n' + chalk.bold.cyan('📊 Statistics'));
       console.log(chalk.gray('─'.repeat(40)));
       console.log(`Total:      ${chalk.green.bold(stats.total)}`);
       console.log(`Progress:   ${chalk.yellow.bold(stats.avgProgress + '%')}`);
       console.log(`Blocked:    ${stats.blocked > 0 ? chalk.red.bold(stats.blocked) : chalk.gray('0')}`);
+      const triageDisplay = triageCount === null ? chalk.gray('N/A (gh?)') : chalk.cyan.bold(triageCount);
+      console.log(`Triage:     ${triageDisplay}`);
       console.log('');
     } catch (err) {
       console.error(chalk.red('Error:'), err.message);
