@@ -67,6 +67,31 @@ product-docs/
 
 ---
 
+## Triage Workflow (GitHub Issues → Stories → PRs)
+
+Use GitHub Issues as the canonical inbox for feedback and feature requests. This workflow keeps Issues, PRDs, and PRs in sync so everyone can see what’s been tackled.
+
+### Labels
+
+| Label | Meaning |
+|-------|---------|
+| **triage** | Issue is in the inbox; not yet converted to a story. |
+| **story-created** | A PRD exists with `source_issue` linking this Issue (story is in backlog or in progress). |
+| **released** (optional) | Issue was addressed; PR merged. You can add this when closing. |
+
+### Lifecycle
+
+1. **Issue created** — Apply label `triage`. (Templates can add it automatically.)
+2. **PRD created from Issue** — In Cursor: `/create from #123 @project/backlog.md`. In the story file, set `source_issue: "#123"` in the YAML frontmatter. Then update the GitHub Issue: remove label `triage`, add label `story-created`.
+3. **PR implements the story** — In the PR description (or title), include `Fixes #123` or `Closes #123` so GitHub links the PR to the Issue.
+4. **PR merged** — GitHub automatically closes the linked Issue. Optionally add label `released` before or at close so the path (open → triage → story-created → closed/released) is visible.
+
+### Visibility
+
+- **CLI:** `prd` and `prd stats` show the count of open Issues with label `triage` (requires [GitHub CLI](https://cli.github.com/) `gh` when run from the repo). If `gh` is not available or not authenticated, the triage count shows as N/A.
+
+---
+
 ## PRD Metadata Format
 
 All PRDs must include YAML frontmatter for dashboard visibility:
@@ -87,12 +112,14 @@ branch: feature/US-027-slug
 pr: 123
 dependencies: [US-019, US-020]
 blockers: []
+source_issue: "#123"   # Optional: GitHub Issue this story came from (traceability)
 ---
 ```
 
 | Field | Values | Description |
 |-------|--------|-------------|
 | `status` | create, approved, dev, done | Current workflow status |
+| `source_issue` | "#123" or null | Optional. GitHub Issue ID this story was created from (for triage workflow). |
 | `phase` | planning, development, testing, review, deployed | Detailed phase within status |
 | `progress` | 0-100 | Percentage complete (AC or task based) |
 | `verified` | true, false, skipped | PRD passed verification |
