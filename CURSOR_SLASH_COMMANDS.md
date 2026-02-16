@@ -59,25 +59,26 @@ Goal:
 
 Instructions:
 1. Read PROCESS.md and focus on the Phase 1 (/create) section.
-2. If the user’s message includes an Issue reference (e.g. “from #123”, “from issue #123”, “based on #123”):
+3. If the user’s message includes an Issue reference (e.g. “from #123”, “from issue #123”, “based on #123”):
    - Treat that GitHub Issue as the primary input. Read the Issue’s title and body (e.g. from the repo’s Issues, or from context the user provides).
    - Use the Issue content to prefill the PRD: map “Problem Statement” and “Expected Behavior” (or similar) from the Issue into the story’s Goal, Problem Statement, and Acceptance Criteria. If the user did not paste the Issue body, ask them to paste it or confirm you have the right Issue.
    - In the story file’s YAML frontmatter, set source_issue: "#123" (or the actual issue number) so the story is traceable to the Issue.
-3. Read product-docs/README.md to understand the workspace and how global story IDs work.
-4. Read the referenced backlog file (e.g. {project}/backlog.md) to understand existing stories.
-5. Determine the next available global ID (US-XXX) using README.md and/or backlog.md.
-6. Create or update the story file {project}/US-XXX.md using the required YAML frontmatter and sections from PROCESS.md (prefilled from the Issue when applicable).
-7. Drive an iterative conversation with the user to refine:
+2. First-story gate (Kickoff): If this is the first story in the project (no US-*.md in the project folder or backlog has no story links), check for {project}/VISION.md. If it does not exist, do not create a PRD. Tell the user to run "prd init" without --no-kickoff to set vision and tech, then /create again.
+4. Read product-docs/README.md to understand the workspace and how global story IDs work.
+5. Read the referenced backlog file (e.g. {project}/backlog.md) to understand existing stories.
+6. Determine the next available global ID (US-XXX) using README.md and/or backlog.md.
+7. Create or update the story file {project}/US-XXX.md using the required YAML frontmatter and sections from PROCESS.md (prefilled from the Issue when applicable).
+8. Drive an iterative conversation with the user to refine:
    - Problem statement, users, and goals
    - Scope, behavior, and non-goals
    - Acceptance criteria (AC), edge cases, non-functional requirements (NFRs)
-8. Run a PRD verification pass as described in PROCESS.md:
+9. Run a PRD verification pass as described in PROCESS.md:
    - Identify gaps
    - Propose concrete fixes
    - Apply or leave for manual edits, based on user choice
-9. Extract features and dev tasks if the process calls for it.
-10. Update {project}/backlog.md and any "next ID" registry so the story is tracked.
-11. When the PRD is ready, summarize:
+10. Extract features and dev tasks if the process calls for it.
+11. Update {project}/backlog.md and any "next ID" registry so the story is tracked.
+12. When the PRD is ready, summarize:
     - Story ID and title
     - Key AC and NFRs
     - Features and dev tasks

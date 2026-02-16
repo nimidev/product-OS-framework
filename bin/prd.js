@@ -21,9 +21,10 @@ program
 program
   .command('init')
   .description('Create a new product workspace')
-  .action(async () => {
+  .option('--no-kickoff', 'Skip project kickoff (vision & tech setup)')
+  .action(async (options) => {
     const { init } = require('../lib/commands/init');
-    await init();
+    await init({ kickoff: options.kickoff !== false });
   });
 
 // --- prd add-project ---
