@@ -92,11 +92,30 @@ backlog = backlog.replace(/\{\{projectName\}\}/g, PROJECT_NAME);
 fs.writeFileSync(path.join(wsDir, PROJECT_NAME, 'backlog.md'), backlog);
 assert(fs.existsSync(path.join(wsDir, PROJECT_NAME, 'backlog.md')), 'backlog.md created');
 
-// Create RULES.md from template
-let rules = fs.readFileSync(path.join(templatesDir, 'RULES.md.tmpl'), 'utf-8');
-rules = rules.replace(/\{\{projectName\}\}/g, PROJECT_NAME);
-fs.writeFileSync(path.join(wsDir, PROJECT_NAME, 'RULES.md'), rules);
-assert(fs.existsSync(path.join(wsDir, PROJECT_NAME, 'RULES.md')), 'RULES.md created');
+// Create context/ folder with TECH_CONTEXT, PROJECT_CONTEXT, and README
+const contextDir = path.join(wsDir, PROJECT_NAME, 'context');
+fs.mkdirSync(contextDir, { recursive: true });
+
+let techCtx = fs.readFileSync(path.join(templatesDir, 'TECH_CONTEXT.md.tmpl'), 'utf-8');
+techCtx = techCtx.replace(/\{\{projectName\}\}/g, PROJECT_NAME);
+techCtx = techCtx.replace(/\{\{techStack\}\}/g, '- Language:\n- Framework:\n- Database:\n- Testing:');
+fs.writeFileSync(path.join(contextDir, 'TECH_CONTEXT.md'), techCtx);
+assert(fs.existsSync(path.join(contextDir, 'TECH_CONTEXT.md')), 'context/TECH_CONTEXT.md created');
+
+let projCtx = fs.readFileSync(path.join(templatesDir, 'PROJECT_CONTEXT.md.tmpl'), 'utf-8');
+projCtx = projCtx.replace(/\{\{projectName\}\}/g, PROJECT_NAME);
+projCtx = projCtx.replace(/\{\{productDescription\}\}/g, 'Backend API for food delivery platform');
+projCtx = projCtx.replace(/\{\{targetUsers\}\}/g, '{To be filled}');
+projCtx = projCtx.replace(/\{\{goals\}\}/g, '{To be filled}');
+projCtx = projCtx.replace(/\{\{constraints\}\}/g, '{None identified yet}');
+projCtx = projCtx.replace(/\{\{commonNonGoals\}\}/g, '{To be filled}');
+fs.writeFileSync(path.join(contextDir, 'PROJECT_CONTEXT.md'), projCtx);
+assert(fs.existsSync(path.join(contextDir, 'PROJECT_CONTEXT.md')), 'context/PROJECT_CONTEXT.md created');
+
+let ctxReadme = fs.readFileSync(path.join(templatesDir, 'context-README.md.tmpl'), 'utf-8');
+ctxReadme = ctxReadme.replace(/\{\{projectName\}\}/g, PROJECT_NAME);
+fs.writeFileSync(path.join(contextDir, 'README.md'), ctxReadme);
+assert(fs.existsSync(path.join(contextDir, 'README.md')), 'context/README.md created');
 
 // Create .code-workspace file
 const workspace = {
@@ -176,9 +195,12 @@ let backlog2 = fs.readFileSync(path.join(templatesDir, 'backlog.md.tmpl'), 'utf-
 backlog2 = backlog2.replace(/\{\{projectName\}\}/g, proj2);
 fs.writeFileSync(path.join(wsDir, proj2, 'backlog.md'), backlog2);
 
-let rules2 = fs.readFileSync(path.join(templatesDir, 'RULES.md.tmpl'), 'utf-8');
-rules2 = rules2.replace(/\{\{projectName\}\}/g, proj2);
-fs.writeFileSync(path.join(wsDir, proj2, 'RULES.md'), rules2);
+const contextDir2 = path.join(wsDir, proj2, 'context');
+fs.mkdirSync(contextDir2, { recursive: true });
+let techCtx2 = fs.readFileSync(path.join(templatesDir, 'TECH_CONTEXT.md.tmpl'), 'utf-8');
+techCtx2 = techCtx2.replace(/\{\{projectName\}\}/g, proj2);
+techCtx2 = techCtx2.replace(/\{\{techStack\}\}/g, '- Language:\n- Framework:\n- Database:\n- Testing:');
+fs.writeFileSync(path.join(contextDir2, 'TECH_CONTEXT.md'), techCtx2);
 
 createStoryInProject(5, 'Order placement flow', 'P0', 'create', proj2);
 

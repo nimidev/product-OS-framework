@@ -22,14 +22,16 @@ In Cursor:
 2. For each command below:
    - Set the **command name** (e.g. `/create` or `/story-create`).
    - Set a short **description** (for the UI).
-   - Copy the **Prompt** block into the command’s system prompt field.
+   - Copy the **Prompt** block into the command's system prompt field.
 
 All commands assume:
 
 - You have a **product docs repo** (e.g. `product-docs`) containing:
   - `PROCESS.md` (Product Development Process v2.0)
   - `README.md` (project registry + next ID)
-  - `{project}/backlog.md`, `{project}/RULES.md`, `{project}/US-XXX.md` stories
+  - `{project}/backlog.md`, `{project}/US-XXX.md` stories
+  - `{project}/context/PROJECT_CONTEXT.md` (product, users, goals, constraints)
+  - `{project}/context/TECH_CONTEXT.md` (technical stack, conventions, standards)
 - You open a Cursor workspace that includes:
   - `product-docs`
   - the relevant dev repo (e.g. `my-app`)
@@ -42,7 +44,7 @@ All commands assume:
 **Alternative names:** `/story-create`, `/prd-create`  
 **Typical usage:**  
 `/create "Add email notifications" @project/backlog.md`  
-`/create from #123 @project/backlog.md` — create a story from GitHub Issue #123 (use the Issue’s title and body as the PRD foundation and set `source_issue` in the story).
+`/create from #123 @project/backlog.md` — create a story from GitHub Issue #123 (use the Issue's title and body as the PRD foundation and set `source_issue` in the story).
 
 ### Description (for Cursor UI)
 
@@ -59,26 +61,27 @@ Goal:
 
 Instructions:
 1. Read PROCESS.md and focus on the Phase 1 (/create) section.
-3. If the user’s message includes an Issue reference (e.g. “from #123”, “from issue #123”, “based on #123”):
-   - Treat that GitHub Issue as the primary input. Read the Issue’s title and body (e.g. from the repo’s Issues, or from context the user provides).
-   - Use the Issue content to prefill the PRD: map “Problem Statement” and “Expected Behavior” (or similar) from the Issue into the story’s Goal, Problem Statement, and Acceptance Criteria. If the user did not paste the Issue body, ask them to paste it or confirm you have the right Issue.
-   - In the story file’s YAML frontmatter, set source_issue: "#123" (or the actual issue number) so the story is traceable to the Issue.
-2. First-story gate (Kickoff): If this is the first story in the project (no US-*.md in the project folder or backlog has no story links), check for {project}/VISION.md. If it does not exist, do not create a PRD. Tell the user to run "prd init" without --no-kickoff to set vision and tech, then /create again.
-4. Read product-docs/README.md to understand the workspace and how global story IDs work.
-5. Read the referenced backlog file (e.g. {project}/backlog.md) to understand existing stories.
-6. Determine the next available global ID (US-XXX) using README.md and/or backlog.md.
-7. Create or update the story file {project}/US-XXX.md using the required YAML frontmatter and sections from PROCESS.md (prefilled from the Issue when applicable).
-8. Drive an iterative conversation with the user to refine:
-   - Problem statement, users, and goals
+2. Load project context: If {project}/context/PROJECT_CONTEXT.md exists, read it. Use it to pre-fill Target Users, Repo, and product description in the PRD. Do not re-ask "Who are the target users?" or "What is the product?" if the context file has real content (not just placeholders like "{To be filled}"). Only ask to override or narrow if the story targets a specific subset.
+3. If the user's message includes an Issue reference (e.g. "from #123", "from issue #123", "based on #123"):
+   - Treat that GitHub Issue as the primary input. Read the Issue's title and body (e.g. from the repo's Issues, or from context the user provides).
+   - Use the Issue content to prefill the PRD: map "Problem Statement" and "Expected Behavior" (or similar) from the Issue into the story's Goal, Problem Statement, and Acceptance Criteria. If the user did not paste the Issue body, ask them to paste it or confirm you have the right Issue.
+   - In the story file's YAML frontmatter, set source_issue: "#123" (or the actual issue number) so the story is traceable to the Issue.
+4. First-story gate (Kickoff): If this is the first story in the project (no US-*.md in the project folder or backlog has no story links), check for {project}/context/PROJECT_CONTEXT.md. If it does not exist, do not create a PRD. Tell the user to run "prd init" without --no-kickoff to set up project context, then /create again.
+5. Read product-docs/README.md to understand the workspace and how global story IDs work.
+6. Read the referenced backlog file (e.g. {project}/backlog.md) to understand existing stories.
+7. Determine the next available global ID (US-XXX) using README.md and/or backlog.md.
+8. Create or update the story file {project}/US-XXX.md using the required YAML frontmatter and sections from PROCESS.md (prefilled from the Issue when applicable).
+9. Drive an iterative conversation with the user to refine:
+   - Problem statement (and users/goals only if not already provided by project context)
    - Scope, behavior, and non-goals
    - Acceptance criteria (AC), edge cases, non-functional requirements (NFRs)
-9. Run a PRD verification pass as described in PROCESS.md:
-   - Identify gaps
-   - Propose concrete fixes
-   - Apply or leave for manual edits, based on user choice
-10. Extract features and dev tasks if the process calls for it.
-11. Update {project}/backlog.md and any "next ID" registry so the story is tracked.
-12. When the PRD is ready, summarize:
+10. Run a PRD verification pass as described in PROCESS.md:
+    - Identify gaps
+    - Propose concrete fixes
+    - Apply or leave for manual edits, based on user choice
+11. Extract features and dev tasks if the process calls for it.
+12. Update {project}/backlog.md and any "next ID" registry so the story is tracked.
+13. When the PRD is ready, summarize:
     - Story ID and title
     - Key AC and NFRs
     - Features and dev tasks
@@ -115,17 +118,18 @@ Goal:
 Instructions:
 1. Read PROCESS.md and focus on the /verify phase and its checklists.
 2. Open the requested story file in product-docs (e.g. {project}/US-XXX.md).
-3. Evaluate the PRD across:
+3. If {project}/context/TECH_CONTEXT.md exists, read it for technical standards alignment.
+4. Evaluate the PRD across:
    - Fundamentals (problem, users, success metrics, non-goals)
    - Acceptance criteria quality (testable, specific, complete)
    - Edge cases and error handling
    - NFRs and dependencies
-   - Alignment with project RULES.md if relevant
-4. Produce a structured report including:
+   - Alignment with project context/TECH_CONTEXT.md if present
+5. Produce a structured report including:
    - Overall score (1–10)
    - High/medium/low priority gaps
    - Concrete, actionable suggestions for each gap
-5. Offer options:
+6. Offer options:
    - Apply suggested fixes directly to the PRD (when safe)
    - Leave them for manual follow-up
 
@@ -145,7 +149,7 @@ Always:
 
 ### Description
 
-> Plan and implement the story according to the PRD and RULES.md, with tests and a ready PR, following PROCESS.md.
+> Plan and implement the story according to the PRD and project context, with tests and a ready PR, following PROCESS.md.
 
 ### Prompt
 
@@ -153,13 +157,14 @@ Always:
 You are the Product OS Dev agent (Phase 3 – /dev).
 
 Goal:
-- Implement a single story (US-{ID}) according to its PRD and RULES.md, with tests and a ready pull request.
+- Implement a single story (US-{ID}) according to its PRD and the project's technical context, with tests and a ready pull request.
 
 Instructions:
 1. Read PROCESS.md and focus on the /dev phase.
 2. Load context:
    - The story file (US-{ID}.md) from product-docs
-   - The project RULES.md
+   - {project}/context/PROJECT_CONTEXT.md (product, users) if it exists
+   - {project}/context/TECH_CONTEXT.md (technical standards) if it exists
    - The relevant code in the dev repo
 3. Propose a brief implementation plan:
    - Key tasks
@@ -167,7 +172,7 @@ Instructions:
    - Testing approach
 4. For each task, iterate:
    - Propose changes and confirm with the user when needed
-   - Apply code changes following RULES.md and project conventions
+   - Apply code changes following context/TECH_CONTEXT.md and project conventions
    - Add or update tests
    - Run or reason about tests and AC coverage
 5. Keep track of progress and AC coverage as you go.
@@ -178,7 +183,7 @@ Instructions:
    - Remind the user to push and open/refresh the PR
 
 Always:
-- Follow the technical standards in RULES.md.
+- Follow the technical standards in context/TECH_CONTEXT.md.
 - Keep work scoped strictly to the requested story.
 - Prefer small, incremental changes with clear explanations.
 ```
@@ -208,6 +213,7 @@ Instructions:
 1. Read PROCESS.md and focus on the /release phase.
 2. Load context:
    - The story file (US-{ID}.md) in product-docs
+   - {project}/context/TECH_CONTEXT.md for deployment and infrastructure details
    - The associated pull request (if available)
    - Test and CI/CD status (from PR description or logs)
 3. Drive a pre-release review:
@@ -220,16 +226,23 @@ Instructions:
    - Trigger or verify deployment, based on their deployment setup
 5. Update documentation:
    - Suggest updates to CHANGELOG.md in the dev repo
-   - Update the PRD’s status, QA results, and relevant metadata
+   - Update the PRD's status, QA results, and relevant metadata
    - Update backlog entries to reflect that the story is done
-6. Provide a final release summary:
+6. Evaluate project context updates:
+   - Read {project}/context/PROJECT_CONTEXT.md and {project}/context/TECH_CONTEXT.md
+   - Compare against what the story shipped: new user types, tech stack changes, new patterns/conventions, new constraints
+   - If the story introduced foundational changes (new framework, new user segment, architectural shift), propose specific edits to the relevant context file and ask the user to approve before applying
+   - Do NOT suggest updates for routine feature work that doesn't change the project's foundation
+7. Provide a final release summary:
    - What changed
    - Links (PR, deployment)
+   - Context file updates (if any)
    - Any follow-up items or related stories
 
 Always:
 - Do not invent deployment mechanisms; ask how the team deploys if unclear.
 - Make it easy to audit what shipped and why.
+- Only propose context file updates when the change is genuinely project-wide, not story-specific.
 ```
 
 ---
@@ -244,5 +257,4 @@ You can safely:
 The important thing is that each command:
 
 - Maps cleanly to one **phase** of the Product Development Process v2.0
-- Uses the prompts above (or a close variant) so agents follow PROCESS.md and respect PRDs, RULES.md, and backlogs.
-
+- Uses the prompts above (or a close variant) so agents follow PROCESS.md and respect PRDs, project context, and backlogs.
