@@ -119,11 +119,11 @@ Goal: go from idea to a clear, verified PRD with extracted features and tasks.
 
 ### Phase 2 – Dev (Implementation)
 
-Goal: implement the story according to the PRD and RULES, with tests and a ready PR.
+Goal: implement the story according to the PRD and project context, with tests and a ready PR.
 
 - Start or resume with: `/dev US-{ID}`
 - The agent:
-  - Loads the PRD, backlog entry, and `RULES.md`
+  - Loads the PRD, backlog entry, and project context (`context/TECH_CONTEXT.md`)
   - Proposes a plan and tasks
   - Iterates through: code → tests → AC verification
 - Exit when all tasks are done, tests pass, ACs are covered, and a PR is ready.
@@ -148,7 +148,9 @@ your-product-docs/
 ├── README.md                 # Project registry
 └── my-app/                   # Project folder
     ├── backlog.md            # Story tracking
-    ├── RULES.md              # Technical standards
+    ├── context/              # Shared project context
+    │   ├── PROJECT_CONTEXT.md  # Product, users, goals
+    │   └── TECH_CONTEXT.md     # Tech stack, conventions
     ├── US-001.md             # Story files
     └── US-002.md
 ```
@@ -172,8 +174,10 @@ Each project folder contains stories (`US-*.md`) with YAML frontmatter that powe
 ### Quality Gates
 Every PRD goes through automated verification before development starts. Gaps are identified and suggested fixes offered.
 
-### RULES.md
-Each project has a `RULES.md` defining technical standards (tech stack, patterns, testing). AI agents read this during `/dev` to ensure consistent implementation.
+### Context Folder
+Each project has a `context/` folder with two shared files:
+- **`PROJECT_CONTEXT.md`** — Product description, target users, goals, constraints, common non-goals. Used by `/create` to skip redundant project-level questions and by all commands for consistent context.
+- **`TECH_CONTEXT.md`** — Technical stack, patterns, conventions, testing. AI agents read this during `/dev` to ensure consistent implementation.
 
 ### YAML Frontmatter
 Stories include metadata that powers the dashboard:

@@ -1,6 +1,6 @@
 {
   "name": "prd-cli",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Product OS Framework - AI-native product development lifecycle for Cursor",
   "main": "lib/parser.js",
   "bin": {

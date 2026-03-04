@@ -27,7 +27,7 @@ When creating a new story, use the next available ID. The `/create` command in C
 ### Phase 2 – Dev (Implementation)
 
 1. With the same workspace open, start development: `/dev US-{ID}`
-2. The agent reads the PRD and `RULES.md`, proposes a plan, and implements tasks iteratively
+2. The agent reads the PRD and `context/TECH_CONTEXT.md`, proposes a plan, and implements tasks iteratively
 3. Continue until all tasks are complete, tests pass, and ACs are covered
 
 ### Phase 3 – Release (Ship & Document)
@@ -79,4 +79,4 @@ What problem does this solve?
 prd add-project
 ```
 
-This creates the project folder, backlog, RULES.md, and updates the workspace.
+This creates the project folder, backlog, context folder (PROJECT_CONTEXT.md + TECH_CONTEXT.md), and updates the workspace.
