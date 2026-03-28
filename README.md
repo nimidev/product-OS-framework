@@ -21,7 +21,7 @@ You’re not juggling fifteen templates. You’re moving a story through four na
 
 **Create → Verify → Build → Release**
 
-That’s it. Under the hood, Cursor runs four slash commands (you can rename them if you like). Together they keep requirements tight, code aligned, and shipping disciplined.
+That’s the core loop. Optionally, **`/improve`** captures a process gap and routes a fix to the framework or your project context. Under the hood, Cursor runs these slash commands (you can rename them if you like). Together they keep requirements tight, code aligned, and shipping disciplined.
 
 ---
 
@@ -65,7 +65,7 @@ Answer the prompts (or say hello to the guided kickoff). Product OS will set up 
 
 ### 3. Wire up Cursor (one-time)
 
-Slash commands are defined **in Cursor**, not installed automatically. Copy the ready-made prompts from **[`CURSOR_SLASH_COMMANDS.md`](./CURSOR_SLASH_COMMANDS.md)** into four commands—many teams call them `/create`, `/verify`, `/dev`, and `/release`. Takes a few minutes once; then the whole team benefits.
+Slash commands are defined **in Cursor**, not installed automatically. Copy the ready-made prompts from **[`CURSOR_SLASH_COMMANDS.md`](./CURSOR_SLASH_COMMANDS.md)** into commands—many teams use `/create`, `/verify`, `/dev`, `/release`, and optionally `/improve`. Takes a few minutes once; then the whole team benefits.
 
 ### 4. Write your first story
 
@@ -83,7 +83,7 @@ You’ll see a colorful overview of stories, status, and progress—useful for s
 
 ---
 
-## Your four phases in Cursor
+## Your phases in Cursor
 
 | Phase | Typical command | What you get |
 |--------|-----------------|--------------|
@@ -91,6 +91,7 @@ You’ll see a colorful overview of stories, status, and progress—useful for s
 | **Quality check** | `/verify` | A structured review that finds gaps *before* engineering invests weeks. |
 | **Build** | `/dev` | Implementation guided by the PRD and your team’s standards. |
 | **Ship** | `/release` | Merge, deploy, and documentation so nothing falls through the cracks. |
+| **Framework feedback** | `/improve` | Capture a process gap → propose a concrete change → apply in `product-OS-framework` if that repo is in the workspace, or export a patch for a PR. |
 
 *(You can use different command names—see the Cursor setup doc above.)*
 

@@ -1,11 +1,12 @@
 # Cursor Slash Commands for Product OS
 
-Product OS is designed around **four phases** that are triggered via **slash commands in Cursor**:
+Product OS is designed around **four phases** plus an optional **framework feedback** command, all triggered via **slash commands in Cursor**:
 
 - Create & Verify → `/create`
 - Verify (optional) → `/verify`
 - Dev → `/dev`
 - Release → `/release`
+- Improve (optional) → `/improve` — capture a process gap and route a fix to the framework or project context
 
 The `prd-cli` npm package does **not** automatically create these commands inside Cursor.  
 This file is part of the framework deliverables so you can quickly configure them yourself (or adjust them for your team).
@@ -181,6 +182,9 @@ Instructions:
    - Make sure tests are passing
    - Prepare a PR title and body. If the story has source_issue in its frontmatter, the PR description must include "Fixes #<issue_id>" or "Closes #<issue_id>" so the GitHub Issue is linked and auto-closed when the PR is merged (see PROCESS.md Triage Workflow).
    - Remind the user to push and open/refresh the PR
+7. Before this session ends (when the user says "done", "wrap up", or at natural session close—not after every micro-task):
+   - Compare what was learned against product-docs/context/PROJECT_CONTEXT.md and product-docs/context/TECH_CONTEXT.md.
+   - If any new conventions, tech decisions, user behaviors, or constraints emerged during this session, propose specific line-level edits and ask the user to approve before writing.
 
 Always:
 - Follow the technical standards in context/TECH_CONTEXT.md.
@@ -228,11 +232,12 @@ Instructions:
    - Suggest updates to CHANGELOG.md in the dev repo
    - Update the PRD's status, QA results, and relevant metadata
    - Update backlog entries to reflect that the story is done
-6. Evaluate project context updates:
-   - Read product-docs/context/PROJECT_CONTEXT.md and product-docs/context/TECH_CONTEXT.md
-   - Compare against what the story shipped: new user types, tech stack changes, new patterns/conventions, new constraints
-   - If the story introduced foundational changes (new framework, new user segment, architectural shift), propose specific edits to the relevant context file and ask the user to approve before applying
-   - Do NOT suggest updates for routine feature work that doesn't change the project's foundation
+6. Evaluate project context updates using this checklist (ask each explicitly; if none apply, say "No context updates needed" and briefly why):
+   - "Did this story introduce any new tech, library, or infrastructure not already in TECH_CONTEXT.md?"
+   - "Did this story reveal a user behavior or constraint not in PROJECT_CONTEXT.md?"
+   - "Did this story establish a new coding convention or pattern the team should follow?"
+   - If yes to any: propose specific line-level edits to the relevant context file(s) and ask the user to approve before applying.
+   - If no to all: state explicitly "No context updates needed" so the step is visibly completed, not skipped.
 7. Provide a final release summary:
    - What changed
    - Links (PR, deployment)
@@ -242,19 +247,58 @@ Instructions:
 Always:
 - Do not invent deployment mechanisms; ask how the team deploys if unclear.
 - Make it easy to audit what shipped and why.
-- Only propose context file updates when the change is genuinely project-wide, not story-specific.
+- Use the checklist in step 6 for every release; do not skip with vague "maybe update context" without answering the three questions.
 ```
 
 ---
 
-## 6. Naming and Variants
+## 6. `/improve` – Framework or process feedback (optional)
+
+**Recommended command name:** `/improve`  
+**Alternative names:** `/story-improve`, `/prd-improve`  
+**Typical usage:**  
+`/improve "the /create command kept re-asking about target users even though PROJECT_CONTEXT.md had them"`  
+`/improve "the /dev kickoff doesn't load TECH_CONTEXT automatically when starting a new task"`
+
+### Description
+
+> Capture a Product OS process gap, route it to the right file (framework vs project context), show a concrete diff, then apply to the framework repo if available—or output a patch for a manual PR.
+
+### Prompt
+
+```text
+You are the Product OS Improve agent (framework & process feedback).
+
+Goal:
+- Turn a short description of what went wrong into a concrete edit to the right artifact: either the Product OS Framework repo (process/slash prompts/templates) or the project's product-docs/context/ files.
+
+Routing rule (embed in your reasoning):
+> If the issue would help anyone using Product OS on any project, it belongs in product-OS-framework/ (CURSOR_SLASH_COMMANDS.md, templates/PROCESS.md, or a template). If it is specific to this project's tech or users, it belongs in product-docs/context/. Ask the user which if unclear.
+
+Instructions:
+1. From the user's message, identify which framework file is most relevant: CURSOR_SLASH_COMMANDS.md, templates/PROCESS.md, or a file under templates/ (or README.md if documentation-only).
+2. Show the relevant existing text from that file (or ask the user to add the framework folder to the workspace if you cannot read it).
+3. Propose a specific before/after diff—not a vague suggestion; line-level or unified-diff style.
+4. Prerequisite check: If a writable product-OS-framework/ tree is open in the workspace (e.g. multi-root workspace with the framework repo), ask: "Apply this change to product-OS-framework?" On approval: write the change, add a one-line entry to CHANGELOG.md under [Unreleased], and confirm. Never auto-commit without explicit user confirmation; always show the diff first.
+5. Fallback (no framework repo in workspace or not writable): Do not claim you committed. Output: unified diff or clear before/after, target file path(s), a suggested one-line CHANGELOG entry, and instructions to open a PR against https://github.com/nimidev/product-OS-framework . Offer to iterate if the user adjusts the diff.
+6. If the user rejects applying to the framework: ask what the correct fix should be and iterate.
+7. If the fix belongs in product-docs/context/ instead, follow the project context loop: propose edits to PROJECT_CONTEXT.md or TECH_CONTEXT.md with approval before writing.
+
+Always:
+- Never apply framework changes without user approval after showing the diff.
+- Do not mix framework edits with project context edits without applying the routing rule above.
+```
+
+---
+
+## 7. Naming and Variants
 
 You can safely:
 
-- Use the **short names** (`/create`, `/verify`, `/dev`, `/release`) as in this repository, or
+- Use the **short names** (`/create`, `/verify`, `/dev`, `/release`, `/improve`) as in this repository, or
 - Use prefixed variants (`/story-create`, `/story-dev`, etc.) if you want to group Product OS commands.
 
 The important thing is that each command:
 
-- Maps cleanly to one **phase** of the Product Development Process (v3.0)
+- Maps cleanly to one **phase** of the Product Development Process (v3.0), **or** to the optional `/improve` feedback loop
 - Uses the prompts above (or a close variant) so agents follow PROCESS.md and respect PRDs, project context, and backlogs.
