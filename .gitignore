@@ -16,7 +16,7 @@ coverage/
 .nyc_output/
 .tmp/
 .cache/
-# Local / maintainer-only (not part of OSS)
+# Maintainer-local only — never commit (keeps clones and npm tarball free of PRDs/backlogs)
 product-docs/
 docs/
 examples/

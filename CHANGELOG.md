@@ -2,6 +2,29 @@
 
 All notable changes to the Product OS Framework will be documented in this file.
 
+## [3.0.0] - 2026-03-28
+
+### Added
+- **Co-located `product-docs/`** — run `prd init` from your **project repo root**; config lives at `product-docs/.prd.config.json` (US-004).
+- Two-pass workspace discovery: nearest `product-docs/.prd.config.json`, then legacy `.prd.config.json` at an ancestor.
+- Flat story layout: `US-*.md` at `product-docs/` root; dashboard uses config `name`.
+- `prd init --yes` / non-TTY / `CI=true` for non-interactive scaffolding; `PRD_FRAMEWORK_PATH` for `.code-workspace` second folder.
+- CLI exit codes: `1` invalid config / errors; `2` init when already initialized.
+- `ConfigLoadError` when `.prd.config.json` is invalid JSON or not a JSON object.
+- `test/us004.test.js` — nested cwd resolution, legacy + flat parser, config error, init idempotency.
+
+### Changed
+- **Breaking:** `prd init` no longer creates a sibling workspace folder; it always creates `./product-docs/` under cwd.
+- `scanAllStories`: if any `US-*.md` exists at docs root, scan **only** that root (ignore subdir stories); else legacy per-subfolder scan.
+- `prd add-project` prints a deprecation message (multi-project-in-one-repo workflow removed for new setups).
+- `resolveDocsPath` / default `prd`: no longer fall back to raw `cwd` when no workspace is found.
+- Docs: `README.md`, `CURSOR_SLASH_COMMANDS.md`, `templates/PROCESS.md` (v3.0), `templates/README.md.tmpl` — paths use `@product-docs/...`.
+- CLI package version aligned to **3.0.0**.
+
+### Migration
+- Existing **standalone** product-docs repos (config at root + project subfolders) continue to work unchanged.
+- To adopt v3: move to `your-repo/product-docs/` with flat or migrated files, run from dev repo, update Cursor prompts to `@product-docs/backlog.md`.
+
 ## [1.1.0] - 2026-03-04
 
 ### Added

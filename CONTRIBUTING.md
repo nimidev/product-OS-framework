@@ -17,7 +17,7 @@ Thanks for your interest in contributing. This project follows a lightweight pro
 ## Scope
 
 - **In scope:** CLI (`bin/`, `lib/`), templates (`templates/`), docs (README, CURSOR_SLASH_COMMANDS, PROCESS), and tests.
-- **Out of scope for this repo:** Product-docs and story backlogs (e.g. `product-docs/`) are maintainer-local and not part of the open source repo. Use `prd init` in your own workspace to create your backlogs.
+- **Out of scope for this repo:** **PRDs, backlogs, and `US-*.md` files are not committed here.** The `product-docs/` path is gitignored on purpose so `git clone` and `npm install prd-cli` stay free of maintainer stories. Track framework work in a **separate private repo** or another workspace, or keep a local-only `product-docs/` that never gets `git add`’d. Contributors use `prd init` in **their** app repos for real product docs.
 
 ## Questions
 

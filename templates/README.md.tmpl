@@ -1,12 +1,8 @@
 # {{workspaceName}}
 
-Product documentation workspace powered by [Product OS Framework](https://github.com/nimidev/product-OS-framework).
+Product documentation for **{{projectName}}**, powered by [Product OS Framework](https://github.com/nimidev/product-OS-framework).
 
-## Projects
-
-| Project | Description |
-|---------|-------------|
-| [{{projectName}}](./{{projectName}}/) | {{projectDescription}} |
+Stories, backlog, and context live in this **`product-docs/`** folder inside your project repo.
 
 ## Story ID Registry
 
@@ -18,8 +14,8 @@ When creating a new story, use the next available ID. The `/create` command in C
 
 ### Phase 1 – Create & Verify (PRD)
 
-1. Open the workspace file in Cursor (`.code-workspace`)
-2. Create a story: `/create "feature description" @{{projectName}}/backlog.md`
+1. Open your project (and optional `.code-workspace`) in Cursor
+2. Create a story: `/create "feature description" @product-docs/backlog.md`
 3. Refine requirements through conversation with the AI agent
 4. Let the agent verify the PRD and address any gaps
 5. Approve the PRD when it is clear and ready for development
@@ -27,7 +23,7 @@ When creating a new story, use the next available ID. The `/create` command in C
 ### Phase 2 – Dev (Implementation)
 
 1. With the same workspace open, start development: `/dev US-{ID}`
-2. The agent reads the PRD and `context/TECH_CONTEXT.md`, proposes a plan, and implements tasks iteratively
+2. The agent reads the PRD and `product-docs/context/TECH_CONTEXT.md`, proposes a plan, and implements tasks iteratively
 3. Continue until all tasks are complete, tests pass, and ACs are covered
 
 ### Phase 3 – Release (Ship & Document)
@@ -38,7 +34,7 @@ When creating a new story, use the next available ID. The `/create` command in C
 
 ### Dashboard
 
-View all stories from any terminal:
+From any folder inside your project repo:
 
 ```bash
 prd              # Full dashboard
@@ -48,7 +44,7 @@ prd stats        # Quick numbers
 
 ## Process
 
-See [PROCESS.md](./PROCESS.md) for the complete product development workflow.
+Follow **PROCESS.md** from the Product OS Framework repository (or your local framework folder).
 
 ## Story File Format
 
@@ -73,10 +69,6 @@ What problem does this solve?
 1. ...
 ```
 
-## Adding a New Project
+## New repo or product?
 
-```bash
-prd add-project
-```
-
-This creates the project folder, backlog, context folder (PROJECT_CONTEXT.md + TECH_CONTEXT.md), and updates the workspace.
+Run **`prd init`** from the **root of that project repo** to scaffold `product-docs/`. Each codebase gets its own `product-docs/` — there is no separate shared docs repo in the default v3 flow.

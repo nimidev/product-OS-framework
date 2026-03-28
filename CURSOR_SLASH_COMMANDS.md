@@ -26,15 +26,15 @@ In Cursor:
 
 All commands assume:
 
-- You have a **product docs repo** (e.g. `product-docs`) containing:
-  - `PROCESS.md` (Product Development Process v2.0)
-  - `README.md` (project registry + next ID)
-  - `{project}/backlog.md`, `{project}/US-XXX.md` stories
-  - `{project}/context/PROJECT_CONTEXT.md` (product, users, goals, constraints)
-  - `{project}/context/TECH_CONTEXT.md` (technical stack, conventions, standards)
+- Your **project repo** (e.g. `my-app`) contains a **`product-docs/`** folder with:
+  - `backlog.md`, `US-XXX.md` story files (at `product-docs/` root for the default v3 layout)
+  - `context/PROJECT_CONTEXT.md` (product, users, goals, constraints)
+  - `context/TECH_CONTEXT.md` (technical stack, conventions, standards)
+  - Optional `README.md` (registry + next ID)
+- **PROCESS.md** lives in the [Product OS Framework](https://github.com/nimidev/product-OS-framework) repo (or a copy in your workspace); agents follow the process version referenced there.
 - You open a Cursor workspace that includes:
-  - `product-docs`
-  - the relevant dev repo (e.g. `my-app`)
+  - your **project repo** (code + `product-docs/`)
+  - **product-OS-framework** (for slash-command prompts and PROCESS.md reference), if you use the generated `.code-workspace` from `prd init`
 
 ---
 
@@ -43,8 +43,8 @@ All commands assume:
 **Recommended command name:** `/create`  
 **Alternative names:** `/story-create`, `/prd-create`  
 **Typical usage:**  
-`/create "Add email notifications" @project/backlog.md`  
-`/create from #123 @project/backlog.md` — create a story from GitHub Issue #123 (use the Issue's title and body as the PRD foundation and set `source_issue` in the story).
+`/create "Add email notifications" @product-docs/backlog.md`  
+`/create from #123 @product-docs/backlog.md` — create a story from GitHub Issue #123 (use the Issue's title and body as the PRD foundation and set `source_issue` in the story).
 
 ### Description (for Cursor UI)
 
@@ -57,20 +57,20 @@ You are the Product OS Create agent (Phase 1 – Create & Verify).
 
 Goal:
 - Turn a short feature description into a clear, verified PRD for a single story (US-{ID})
-- Follow the Product Development Process v2.0 defined in PROCESS.md in the product-docs repo
+- Follow the Product Development Process defined in PROCESS.md (from the Product OS Framework repo or your workspace)
 
 Instructions:
 1. Read PROCESS.md and focus on the Phase 1 (/create) section.
-2. Load project context: If {project}/context/PROJECT_CONTEXT.md exists, read it. Use it to pre-fill Target Users, Repo, and product description in the PRD. Do not re-ask "Who are the target users?" or "What is the product?" if the context file has real content (not just placeholders like "{To be filled}"). Only ask to override or narrow if the story targets a specific subset.
+2. Load project context: If product-docs/context/PROJECT_CONTEXT.md exists, read it. Use it to pre-fill Target Users, Repo, and product description in the PRD. Do not re-ask "Who are the target users?" or "What is the product?" if the context file has real content (not just placeholders like "{To be filled}"). Only ask to override or narrow if the story targets a specific subset.
 3. If the user's message includes an Issue reference (e.g. "from #123", "from issue #123", "based on #123"):
    - Treat that GitHub Issue as the primary input. Read the Issue's title and body (e.g. from the repo's Issues, or from context the user provides).
    - Use the Issue content to prefill the PRD: map "Problem Statement" and "Expected Behavior" (or similar) from the Issue into the story's Goal, Problem Statement, and Acceptance Criteria. If the user did not paste the Issue body, ask them to paste it or confirm you have the right Issue.
    - In the story file's YAML frontmatter, set source_issue: "#123" (or the actual issue number) so the story is traceable to the Issue.
-4. First-story gate (Kickoff): If this is the first story in the project (no US-*.md in the project folder or backlog has no story links), check for {project}/context/PROJECT_CONTEXT.md. If it does not exist, do not create a PRD. Tell the user to run "prd init" without --no-kickoff to set up project context, then /create again.
+4. First-story gate (Kickoff): If this is the first story in the project (no US-*.md in the project folder or backlog has no story links), check for product-docs/context/PROJECT_CONTEXT.md. If it does not exist, do not create a PRD. Tell the user to run "prd init" without --no-kickoff to set up project context, then /create again.
 5. Read product-docs/README.md to understand the workspace and how global story IDs work.
-6. Read the referenced backlog file (e.g. {project}/backlog.md) to understand existing stories.
+6. Read the referenced backlog file (e.g. product-docs/backlog.md) to understand existing stories.
 7. Determine the next available global ID (US-XXX) using README.md and/or backlog.md.
-8. Create or update the story file {project}/US-XXX.md using the required YAML frontmatter and sections from PROCESS.md (prefilled from the Issue when applicable).
+8. Create or update the story file product-docs/US-XXX.md using the required YAML frontmatter and sections from PROCESS.md (prefilled from the Issue when applicable).
 9. Drive an iterative conversation with the user to refine:
    - Problem statement (and users/goals only if not already provided by project context)
    - Scope, behavior, and non-goals
@@ -80,7 +80,7 @@ Instructions:
     - Propose concrete fixes
     - Apply or leave for manual edits, based on user choice
 11. Extract features and dev tasks if the process calls for it.
-12. Update {project}/backlog.md and any "next ID" registry so the story is tracked.
+12. Update product-docs/backlog.md and any "next ID" registry so the story is tracked.
 13. When the PRD is ready, summarize:
     - Story ID and title
     - Key AC and NFRs
@@ -88,7 +88,7 @@ Instructions:
     - Whether verification passed or was skipped
 
 Always:
-- Keep edits within the product-docs repo.
+- Keep edits within this project's `product-docs/` folder (and the dev repo for code).
 - Use specific, testable acceptance criteria.
 - Ask for clarification instead of inventing product decisions.
 - When the story was created from an Issue (source_issue set), remind the user to update the GitHub Issue: remove label "triage" and add label "story-created" so the issue lifecycle stays in sync (see PROCESS.md Triage Workflow).
@@ -117,8 +117,8 @@ Goal:
 
 Instructions:
 1. Read PROCESS.md and focus on the /verify phase and its checklists.
-2. Open the requested story file in product-docs (e.g. {project}/US-XXX.md).
-3. If {project}/context/TECH_CONTEXT.md exists, read it for technical standards alignment.
+2. Open the requested story file in product-docs (e.g. product-docs/US-XXX.md).
+3. If product-docs/context/TECH_CONTEXT.md exists, read it for technical standards alignment.
 4. Evaluate the PRD across:
    - Fundamentals (problem, users, success metrics, non-goals)
    - Acceptance criteria quality (testable, specific, complete)
@@ -163,8 +163,8 @@ Instructions:
 1. Read PROCESS.md and focus on the /dev phase.
 2. Load context:
    - The story file (US-{ID}.md) from product-docs
-   - {project}/context/PROJECT_CONTEXT.md (product, users) if it exists
-   - {project}/context/TECH_CONTEXT.md (technical standards) if it exists
+   - product-docs/context/PROJECT_CONTEXT.md (product, users) if it exists
+   - product-docs/context/TECH_CONTEXT.md (technical standards) if it exists
    - The relevant code in the dev repo
 3. Propose a brief implementation plan:
    - Key tasks
@@ -213,7 +213,7 @@ Instructions:
 1. Read PROCESS.md and focus on the /release phase.
 2. Load context:
    - The story file (US-{ID}.md) in product-docs
-   - {project}/context/TECH_CONTEXT.md for deployment and infrastructure details
+   - product-docs/context/TECH_CONTEXT.md for deployment and infrastructure details
    - The associated pull request (if available)
    - Test and CI/CD status (from PR description or logs)
 3. Drive a pre-release review:
@@ -229,7 +229,7 @@ Instructions:
    - Update the PRD's status, QA results, and relevant metadata
    - Update backlog entries to reflect that the story is done
 6. Evaluate project context updates:
-   - Read {project}/context/PROJECT_CONTEXT.md and {project}/context/TECH_CONTEXT.md
+   - Read product-docs/context/PROJECT_CONTEXT.md and product-docs/context/TECH_CONTEXT.md
    - Compare against what the story shipped: new user types, tech stack changes, new patterns/conventions, new constraints
    - If the story introduced foundational changes (new framework, new user segment, architectural shift), propose specific edits to the relevant context file and ask the user to approve before applying
    - Do NOT suggest updates for routine feature work that doesn't change the project's foundation
@@ -256,5 +256,5 @@ You can safely:
 
 The important thing is that each command:
 
-- Maps cleanly to one **phase** of the Product Development Process v2.0
+- Maps cleanly to one **phase** of the Product Development Process (v3.0)
 - Uses the prompts above (or a close variant) so agents follow PROCESS.md and respect PRDs, project context, and backlogs.
