@@ -1,6 +1,6 @@
 {
   "name": "prd-cli",
-  "version": "3.0.0",
+  "version": "3.1.0",
   "description": "Product OS Framework - AI-native product development lifecycle for Cursor",
   "main": "lib/parser.js",
   "files": [
@@ -17,7 +17,7 @@
     "prd": "bin/prd.js"
   },
   "scripts": {
-    "test": "node test/us004.test.js && node test/sarah-test.js",
+    "test": "node test/us004.test.js && node test/us005.test.js && node test/sarah-test.js",
     "link": "npm link",
     "unlink": "npm unlink"
   },

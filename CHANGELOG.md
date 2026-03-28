@@ -2,6 +2,19 @@
 
 All notable changes to the Product OS Framework will be documented in this file.
 
+## [3.1.0] - 2026-03-28
+
+### Added
+- **`/improve`** — documented in `CURSOR_SLASH_COMMANDS.md`: route framework vs project-context fixes, apply when `product-OS-framework` is writable, or output patch + PR instructions (US-005).
+- **Learning Loops** section in `templates/PROCESS.md` (project context loop, framework loop, decision filter, workspace tip).
+- **`prd init`** scaffolds `.cursor/rules/product-os.mdc` from `templates/product-os.mdc.tmpl` (Cursor MDC; skipped if the file already exists).
+- Next-steps output after init mentions committing vs keeping `.cursor/rules/` local.
+- `test/us005.test.js` — MDC scaffold, context paths, no clobber.
+
+### Changed
+- **`/dev`** and **`/release`** prompts in `CURSOR_SLASH_COMMANDS.md`: end-of-dev context review; release uses explicit three-question context checklist with "No context updates needed."
+- **`README.md`**: documents `/improve` and updates the phases table.
+
 ## [3.0.0] - 2026-03-28
 
 ### Added
