@@ -1,144 +1,139 @@
 # Product OS Framework
 
-**Turn ideas into shipped features—without losing the plot.**  
+**Ship features faster. Keep your entire team aligned. All from your code editor.**
 
-Product OS is a lightweight way to run product work inside **[Cursor](https://cursor.com)**. You get a clear path from *“we should build this”* to *“it’s live and documented,”* with your AI assistant acting like a focused PM and tech lead at each step. Your specs, backlog, and story files **live next to your code**, so product and engineering stay in sync.
-
----
-
-## Why teams use it
-
-- **Less thrash.** One repeatable flow: shape the idea, check quality, build, ship—instead of ad‑hoc docs and forgotten Notion pages.
-- **Better AI conversations.** Cursor slash commands give the model the *right* job at the *right* time (write the PRD, review it, implement it, close the loop).
-- **Visibility for everyone.** A simple terminal dashboard shows what’s in progress, blocked, or done—no extra SaaS required.
-- **You own your work.** Everything important stays in **your** repository. This framework repo is just the tooling and templates.
+Product OS is a lightweight framework for running product work inside **[Cursor](https://cursor.com)**. It gives you a repeatable path from *"we should build this"* to *"it's live"*—with AI that has the full picture at every step.
 
 ---
 
-## How it feels in practice
+## What makes it different
 
-You’re not juggling fifteen templates. You’re moving a story through four natural phases:
+### 1. Your PRDs live inside your codebase
+
+Most teams keep product specs in Notion, Confluence, or wherever—disconnected from the code they describe. Product OS puts your PRDs, backlog, and story history **directly inside your project repository**, alongside your source code.
+
+This isn't just tidiness. It means when you run `/create` or `/verify`, the AI agent reads both your actual code *and* your existing PRDs—current ones and historical ones. It understands what's already been built, what constraints exist, what patterns your team follows. The result: better requirements, smarter gap detection, and fewer surprises in engineering.
+
+No more "the spec didn't account for X"—because the spec was written with full context of X.
+
+### 2. Product visibility baked into your repo
+
+Every story you ship becomes a permanent record inside your codebase—defined, reviewed, built, and closed in order. Anyone with repo access can open `product-docs/` and see exactly what was planned, what was built, and what's coming next—in plain product language, no SaaS login required.
+
+It's the simplest backlog you'll ever maintain, because it's just files.
+
+### 3. Git workflow, handled for you
+
+Product OS is designed so non-technical collaborators never have to think about branches, commits, or pull requests.
+
+When you start a new story, the framework creates a dedicated branch. As you build, it manages commits. When you're done and tests pass, it creates the PR and merges to main—automatically. Your codebase stays clean, your history stays meaningful, and your team ships with confidence.
+
+---
+
+## The core loop
 
 **Create → Verify → Build → Release**
 
-That’s the core loop. Optionally, **`/improve`** captures a process gap and routes a fix to the framework or your project context. Under the hood, Cursor runs these slash commands (you can rename them if you like). Together they keep requirements tight, code aligned, and shipping disciplined.
+Four phases. One Cursor session per phase. The AI acts as PM, tech lead, and QA reviewer at each step—but you stay in control of every decision.
+
+| Phase | Command | What happens |
+|-------|---------|--------------|
+| **Shape** | `/create` | AI interviews you about the feature, then drafts a PRD with problem statement, scope, and acceptance criteria. Refined interactively until it's solid. |
+| **Quality check** | `/verify` | Structured review that reads your code and previous stories to catch gaps, contradictions, and missing edge cases—*before* engineering starts. |
+| **Build** | `/dev` | Implementation guided by the PRD and your codebase patterns. Branch created, commits tracked. |
+| **Ship** | `/release` | PR created, reviewed, merged. Docs updated. Story closed. |
+| **Process feedback** | `/improve` | Capture a framework gap and route a concrete fix to the right template or process file. |
 
 ---
 
-## Get started (simple path)
+## Get started
 
-### 1. Install once
+### 1. Install the CLI
 
-You need **[Node.js](https://nodejs.org/)** on your machine (it includes `npm`). New to the terminal on Mac? Open **Terminal** from Spotlight—or ask a teammate for a five-minute setup.
-
-Pick **one** of these:
-
-**A — Install from npm (easiest for most teams)**  
+You need **[Node.js](https://nodejs.org/)** (includes `npm`).
 
 ```bash
 npm install -g prd-cli
 ```
 
-**B — Clone this repo (good if you want the source, a pinned version, or to contribute)**  
+Or clone and link locally if you want the source or to contribute:
 
 ```bash
 git clone https://github.com/nimidev/product-OS-framework.git
 cd product-OS-framework
-npm install
-npm link
+npm install && npm link
 ```
 
-That registers the **`prd`** command on your computer from your local copy. Later, `git pull` in that folder to update, then run `prd` as usual.
+### 2. Initialize in your project
 
-*(Advanced: you can also run `node path/to/product-OS-framework/bin/prd.js` without linking.)*
-
-### 2. Add Product OS to your project
-
-Go to the **top folder of the app you’re building**—the same place your main code lives—and run:
+From the root of your app:
 
 ```bash
-cd /path/to/your-app
 prd init
 ```
 
-Answer the prompts (or say hello to the guided kickoff). Product OS will set up a dedicated **product-docs** area inside that project and can create a **workspace file** so Cursor can open your app and the framework together. You don’t need to memorize file names; the setup is guided.
+This creates a `product-docs/` folder inside your project and sets up a Cursor workspace that opens your app and the framework together.
 
-### 3. Wire up Cursor (one-time)
+### 3. Add slash commands to Cursor
 
-Slash commands are defined **in Cursor**, not installed automatically. Copy the ready-made prompts from **[`CURSOR_SLASH_COMMANDS.md`](./CURSOR_SLASH_COMMANDS.md)** into commands—many teams use `/create`, `/verify`, `/dev`, `/release`, and optionally `/improve`. Takes a few minutes once; then the whole team benefits.
+Copy the ready-made prompts from **[`CURSOR_SLASH_COMMANDS.md`](./CURSOR_SLASH_COMMANDS.md)** into Cursor. Takes ~5 minutes once. Common setup: `/create`, `/verify`, `/dev`, `/release`, `/improve`.
 
 ### 4. Write your first story
 
-In Cursor chat, describe what you want to build and point at your backlog—Product OS uses a path like **`@product-docs/backlog.md`** so the agent knows where to track the work.
+In Cursor chat, describe what you want to build and reference your backlog:
 
-### 5. Glance at the big picture
+```
+/create @product-docs/backlog.md — I want to add X feature
+```
 
-From your project folder, run:
+### 5. Check status anytime
 
 ```bash
 prd
 ```
 
-You’ll see a colorful overview of stories, status, and progress—useful for standups, planning, or your own peace of mind.
+Colorful dashboard showing all stories, their phase, and what's blocked. Useful for standups, planning, or your own sanity.
 
 ---
 
-## Your phases in Cursor
+## What lives where
 
-| Phase | Typical command | What you get |
-|--------|-----------------|--------------|
-| **Shape** | `/create` | A real PRD: problem, scope, acceptance criteria—refined with the AI until it’s solid. |
-| **Quality check** | `/verify` | A structured review that finds gaps *before* engineering invests weeks. |
-| **Build** | `/dev` | Implementation guided by the PRD and your team’s standards. |
-| **Ship** | `/release` | Merge, deploy, and documentation so nothing falls through the cracks. |
-| **Framework feedback** | `/improve` | Capture a process gap → propose a concrete change → apply in `product-OS-framework` if that repo is in the workspace, or export a patch for a PR. |
-
-*(You can use different command names—see the Cursor setup doc above.)*
-
----
-
-## A peek at the dashboard
-
-```text
-$ prd
-
-  📊 PRODUCT STORIES DASHBOARD
-
-  Summary: 5 stories · avg progress · what’s blocked
-
-  Your stories appear here with status and progress—
-  so the whole team sees the same picture.
+```
+your-app/
+├── src/                    ← your code
+├── product-docs/
+│   ├── backlog.md          ← what's planned
+│   ├── context/            ← project + tech context the AI reads
+│   └── US-001-*.md         ← shipped
+│   └── US-002-*.md         ← shipped
+│   └── US-003-*.md         ← in progress
 ```
 
----
+Everything in `product-docs/` is version-controlled with your code. Stories are just markdown files—readable by anyone, editable in any editor, trackable in git.
 
-## What lives in your repo
-
-Product OS keeps product artifacts **alongside your code**—backlog, story files, and a small **context** folder the AI reads so it doesn’t re-ask “who is the user?” on every feature. You stay in control; nothing is locked in a vendor silo.
-
-> **Note:** This **GitHub repository** only ships the CLI and templates. Your stories and backlog are created **in your project** when you run `prd init`—they are not bundled into public clones, so contributors get a clean download.
+> **Note:** This GitHub repository only ships the CLI and templates. Your stories and backlog are created **in your project** when you run `prd init`—they are not bundled into public clones, so contributors get a clean download.
 
 ---
 
-## If you want to go deeper
+## Go deeper
 
-- **[`CURSOR_SLASH_COMMANDS.md`](./CURSOR_SLASH_COMMANDS.md)** — Full prompt text for each phase.  
-- **[`CONTRIBUTING.md`](./CONTRIBUTING.md)** — How to improve the framework.  
-- **`prd --help`** — Command-line options when you need them.
+- **[`CURSOR_SLASH_COMMANDS.md`](./CURSOR_SLASH_COMMANDS.md)** — Full prompt text for each command
+- **[`CONTRIBUTING.md`](./CONTRIBUTING.md)** — How to improve the framework
+- **`prd --help`** — CLI options
 
-Already using an older “separate docs repo” layout? The same **`prd`** CLI still discovers it—no need to migrate on day one.
+Already using an older "separate docs repo" layout? The same `prd` CLI still discovers it—no need to migrate on day one.
 
 ---
 
 ## Built for
 
-Teams who ship in **Cursor**, care about **clear requirements**, and want **AI that augments** product and engineering—not replaces judgment.
+Teams who ship in **Cursor**, want **requirements that reflect reality**, and believe **AI should augment judgment**—not replace it.
 
 ---
 
 ## Contributing
 
-We welcome issues and PRs. See **[CONTRIBUTING.md](CONTRIBUTING.md)**.
+Issues and PRs welcome. See **[CONTRIBUTING.md](CONTRIBUTING.md)**.
 
 ## License
 
